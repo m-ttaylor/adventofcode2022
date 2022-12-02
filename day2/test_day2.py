@@ -25,7 +25,7 @@ def test_flexibleCalculateWithGoodDecryptionMoreData():
   data = []
   with open('./day2/testday2input2.txt') as f:
     data = f.readlines()
-    expected = 40
+    expected = 39
     actual = day2.calculatePointTotal(data, 'good')
 
     assert(expected == actual)

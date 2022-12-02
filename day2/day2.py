@@ -1,5 +1,11 @@
 DEBUG = False
 
+OUTCOME_POINTS = {
+  'LOSS': 0,
+  'DRAW': 3,
+  'WIN': 6
+}
+
 badOutcomeValuesCypher = {
   'X': { # rock
     'A': 3,
@@ -28,8 +34,8 @@ goodHandValuesCypher = {
   },
   'Y': { # draw
     'A': 1, # play rock
-    'B': 3, # play scissors
-    'C': 2, # play paper
+    'B': 2, # play paper
+    'C': 3, # play scissors
   },
   'Z': { # win
     'A': 2, # play paper
@@ -51,24 +57,26 @@ goodOutcomeValuesCypher = {
 }
 
 def calculatePointTotal(data: list, decryption: str) -> int:
-  value1Cypher, value2Cypher = {}, {}
+  singleLayerMap, doubleLayerMap = {}, {}
 
   if decryption == 'bad':
-    value1Cypher, value2Cypher = badHandValuesCypher, badOutcomeValuesCypher
+    singleLayerMap, doubleLayerMap = badHandValuesCypher, badOutcomeValuesCypher
   elif decryption == 'good':
-    value1Cypher, value2Cypher = goodOutcomeValuesCypher, goodHandValuesCypher
+    singleLayerMap, doubleLayerMap = goodOutcomeValuesCypher, goodHandValuesCypher
 
   score = 0
   for row in data:
     foe, self = row.split()
-    score += (value1Cypher[self] + value2Cypher[self][foe])
+    print(f"outcome: {singleLayerMap[self]}")
+    print(f"hand value: {doubleLayerMap[self][foe]}")
+    score += (singleLayerMap[self] + doubleLayerMap[self][foe])
 
   return score
 
 if __name__ == "__main__":
   DEBUG = True
   TEST = False
-  datasets = ['./day2/day2input.txt', './day2/testday2input.txt']
+  datasets = ['./day2/day2input.txt', './day2/testday2input3.txt']
   filename = datasets[1] if TEST else datasets[0]
   with open(filename, 'r') as file:
     lines = file.readlines()
