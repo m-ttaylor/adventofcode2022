@@ -1,85 +1,120 @@
 DEBUG = False
 
-OUTCOME_POINTS = {
+class FoeHand:
+  ROCK='A'
+  PAPER='B'
+  SCISSORS='C'
+
+class Outcome:
+  LOSS='X'
+  DRAW='Y'
+  WIN='Z'
+
+class PlayerHand:
+  ROCK='X'
+  PAPER='Y'
+  SCISSORS='Z'
+
+Points = {
+  'ROCK': 1,
+  'PAPER': 2,
+  'SCISSORS': 3,
   'LOSS': 0,
   'DRAW': 3,
-  'WIN': 6
+  'WIN': 6,
+  'X': 1,
+  'Y': 2,
+  'Z': 3
 }
 
-badOutcomeValuesCypher = {
-  'X': { # rock
-    'A': 3,
-    'B': 0,
-    'C': 6,
-  },
-  'Y': { # paper
-    'A': 6,
-    'B': 3,
-    'C': 0,
-  },
-  'Z': { # scissors
-    'A': 0,
-    'B': 6,
-    'C': 3,
+def findMatchOutcomePoints(player1, player2):
+  x, y = None, None
+
+  handNumericMap = {
+    FoeHand.ROCK: 0,
+    FoeHand.PAPER: 1,
+    FoeHand.SCISSORS: 2,
+    PlayerHand.ROCK: 0,
+    PlayerHand.PAPER: 1,
+    PlayerHand.SCISSORS: 2,
   }
-}
 
-goodHandValuesCypher = {
-  # determines the hand you play and its point value based on 
-  # your opponent and the desired result
-  'X': { # lose
-    'A': 3, # play scissors
-    'B': 1, # play rock
-    'C': 2, # play paper
-  },
-  'Y': { # draw
-    'A': 1, # play rock
-    'B': 2, # play paper
-    'C': 3, # play scissors
-  },
-  'Z': { # win
-    'A': 2, # play paper
-    'B': 3, # play scissors
-    'C': 1, # play rock
+  x = handNumericMap[player1]
+  y = handNumericMap[player2]
+  
+  outcomeMatrix = [
+    [Points['DRAW'], Points['LOSS'], Points['WIN']],
+    [Points['WIN'], Points['DRAW'], Points['LOSS']],
+    [Points['LOSS'], Points['WIN'], Points['DRAW']]
+  ]
+
+  print(f"args are: {x}, {y}")
+  return outcomeMatrix[y][x]
+
+def findHandPointsFromOutcome(foeHand: str, outcome: str):
+  correctDecryptionHands = {
+    Outcome.LOSS: {
+      FoeHand.ROCK: Points['SCISSORS'],
+      FoeHand.PAPER: Points['ROCK'],
+      FoeHand.SCISSORS: Points['PAPER'],
+    },
+    Outcome.DRAW: {
+      FoeHand.ROCK: Points['ROCK'],
+      FoeHand.PAPER: Points['PAPER'],
+      FoeHand.SCISSORS: Points['SCISSORS'],
+    },
+    Outcome.WIN: {
+      FoeHand.ROCK: Points['PAPER'],
+      FoeHand.PAPER: Points['SCISSORS'],
+      FoeHand.SCISSORS: Points['ROCK'],
+    }
   }
-}
 
-badHandValuesCypher = {
-  'X': 1, # rock
-  'Y': 2, # paper
-  'Z': 3 # scissors
-}
+  return correctDecryptionHands[outcome][foeHand]
 
-goodOutcomeValuesCypher = {
-  'X': 0, # lose
-  'Y': 3, # draw
-  'Z': 6, # win
-}
+def findTotalPointsEarned(foeHand: str, playerHand: str = None, outcome: str = None):
+  
+  outcomesMap = {
+    Outcome.LOSS: 'LOSS',
+    Outcome.DRAW: 'DRAW',
+    Outcome.WIN: 'WIN'
+  }
+
+  handsMap = {
+    PlayerHand.ROCK: 'ROCK',
+    FoeHand.ROCK: 'ROCK',
+    PlayerHand.PAPER: 'PAPER',
+    FoeHand.PAPER: 'PAPER',
+    PlayerHand.SCISSORS: 'SCISSORS',
+    FoeHand.SCISSORS: 'SCISSORS',
+  }
+
+  if playerHand and foeHand:
+    return findMatchOutcomePoints(foeHand, playerHand) + Points[handsMap[playerHand]]
+
+  elif foeHand and outcome:
+    return findHandPointsFromOutcome(foeHand, outcome) + Points[outcomesMap[outcome]]
+
 
 def calculatePointTotal(data: list, decryption: str) -> int:
-  singleLayerMap, doubleLayerMap = {}, {}
-
-  if decryption == 'bad':
-    singleLayerMap, doubleLayerMap = badHandValuesCypher, badOutcomeValuesCypher
-  elif decryption == 'good':
-    singleLayerMap, doubleLayerMap = goodOutcomeValuesCypher, goodHandValuesCypher
-
   score = 0
+
   for row in data:
-    foe, self = row.split()
-    print(f"outcome: {singleLayerMap[self]}")
-    print(f"hand value: {doubleLayerMap[self][foe]}")
-    score += (singleLayerMap[self] + doubleLayerMap[self][foe])
+    a, b = row.split()
+    
+    if decryption == 'bad':
+      score += findTotalPointsEarned(foeHand=a, playerHand=b, outcome=None)
+    elif decryption == 'good':
+      score += findTotalPointsEarned(foeHand=a, playerHand=None, outcome=b)
 
   return score
 
 if __name__ == "__main__":
   DEBUG = True
-  TEST = False
-  datasets = ['./day2/day2input.txt', './day2/testday2input3.txt']
+  TEST = True
+  datasets = ['./day2/day2input.txt', './day2/testday2input2.txt']
   filename = datasets[1] if TEST else datasets[0]
   with open(filename, 'r') as file:
     lines = file.readlines()
+    print(calculatePointTotal(lines, 'bad'))
     print(calculatePointTotal(lines, 'good'))
-
-    # 11732 is too low

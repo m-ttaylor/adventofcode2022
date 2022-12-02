@@ -30,7 +30,7 @@ def test_flexibleCalculateWithGoodDecryptionMoreData():
 
     assert(expected == actual)
 
-def test_flexibleCalculateWithGoodDecryptionExchaustiveData():
+def test_flexibleCalculateWithGoodDecryptionExhaustiveData():
 
   data = []
   with open('./day2/testday2input3.txt') as f:
@@ -38,4 +38,22 @@ def test_flexibleCalculateWithGoodDecryptionExchaustiveData():
     expected = 45
     actual = day2.calculatePointTotal(data, 'good')
 
+    assert(expected == actual)
+
+def test_calculateWithBadDecryptionAndRealData():
+
+  data = []
+  with open('./day2/day2input.txt') as f:
+    data = f.readlines()
+    expected = 14163
+    actual = day2.calculatePointTotal(data, 'bad')
+    assert(expected == actual)
+
+def test_calculateWithGoodDecryptionAndRealData():
+
+  data = []
+  with open('./day2/day2input.txt') as f:
+    data = f.readlines()
+    expected = 12091
+    actual = day2.calculatePointTotal(data, 'good')
     assert(expected == actual)
