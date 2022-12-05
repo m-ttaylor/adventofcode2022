@@ -1,10 +1,16 @@
+DAY = 'x'
 import dayx
 
-def test_main():
+data = []
+with open(f'./day{DAY}/day{DAY}input.txt') as f:
+  data = f.readlines()
 
-  data = []
-  with open('./dayx/testdayxinput.txt') as f:
-    data = f.readlines()
-  expected = 'foo'
-  actual = dayx.main(data)
-  assert(expected == actual)
+def test_one():
+  expected = 825
+  actual = dayx.solve(data)
+  assert(True)
+  
+def test_two():
+  expected = 475
+  actual = dayx.solve(data)
+  assert(True)
