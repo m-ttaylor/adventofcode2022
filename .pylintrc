@@ -1,0 +1,225 @@
+[tool.pylint.main]
+
+[tool.pylint.basic]
+# Naming style matching correct argument names.
+argument-naming-style = camelCase
+
+# Regular expression matching correct argument names. Overrides argument-naming-
+# style. If left empty, argument names will be checked with the set naming style.
+# argument-rgx =
+
+# Naming style matching correct attribute names.
+attr-naming-style = camelCase
+
+# Regular expression matching correct attribute names. Overrides attr-naming-
+# style. If left empty, attribute names will be checked with the set naming
+# style.
+# attr-rgx =
+
+# Bad variable names which should always be refused, separated by a comma.
+bad-names = [foo, bar, baz, toto, tutu, tata]
+
+# Bad variable names regexes, separated by a comma. If names match any regex,
+# they will always be refused
+# bad-names-rgxs =
+
+# Naming style matching correct class attribute names.
+class-attribute-naming-style = any
+
+# Regular expression matching correct class attribute names. Overrides class-
+# attribute-naming-style. If left empty, class attribute names will be checked
+# with the set naming style.
+# class-attribute-rgx =
+
+# Naming style matching correct class names.
+class-naming-style = PascalCase
+
+# Naming style matching correct function names.
+function-naming-style = camelCase
+
+# Good variable names which should always be accepted, separated by a comma.
+good-names = i, j, k, a, b, c, ex, Run, _
+
+# Include a hint for the correct naming format with invalid-name.
+# include-naming-hint = true
+
+# Naming style matching correct method names.
+method-naming-style = camelCase
+
+# Naming style matching correct module names.
+module-naming-style = snake_case
+
+# Naming style matching correct variable names.
+variable-naming-style = camelCase
+
+# List of member names, which should be excluded from the protected access
+# warning.
+exclude-protected = [_asdict, _fields, _replace, _source, _make]
+
+# List of valid names for the first argument in a class method.
+valid-classmethod-first-arg = [cls]
+
+# List of valid names for the first argument in a metaclass class method.
+valid-metaclass-classmethod-first-arg = [cls]
+
+[tool.pylint.design]
+
+[tool.pylint.exceptions]
+# Exceptions that will emit a warning when caught.
+overgeneral-exceptions = [BaseException, Exception]
+
+[tool.pylint.format]
+# Expected format of line ending, e.g. empty (any line ending), LF or CRLF.
+# expected-line-ending-format =
+
+# Regexp for a line that is allowed to be longer than the limit.
+ignore-long-lines = ^\\s*(# )?<?https?://\\S+>?$
+
+# Number of spaces of indent required inside a hanging or continued line.
+indent-after-paren = 4
+
+# String used as indentation unit. This is usually      (4 spaces) or \t (1
+# tab).
+indent-string ='    '
+
+# Maximum number of characters on a single line.
+max-line-length = 150
+
+# Maximum number of lines in a module.
+max-module-lines = 1000
+
+# Allow the body of a class to be on the same line as the declaration if body
+# contains single statement.
+# single-line-class-stmt =
+
+# Allow the body of an if to be on the same line as the test if there is no else.
+# single-line-if-stmt =
+
+[tool.pylint.imports]
+# List of modules that can be imported at any level, not just the top level one.
+# allow-any-import-level =
+
+# Allow wildcard imports from modules that define __all__.
+# allow-wildcard-with-all =
+
+# Deprecated modules which should not be used, separated by a comma.
+# deprecated-modules =
+
+# Output a graph (.gv or any supported image format) of external dependencies to
+# the given file (report RP0402 must not be disabled).
+# ext-import-graph =
+
+# Output a graph (.gv or any supported image format) of all (i.e. internal and
+# external) dependencies to the given file (report RP0402 must not be disabled).
+# import-graph =
+
+# Output a graph (.gv or any supported image format) of internal dependencies to
+# the given file (report RP0402 must not be disabled).
+# int-import-graph =
+
+# Force import order to recognize a module as part of the standard compatibility
+# libraries.
+# known-standard-library =
+
+# Force import order to recognize a module as part of a third party library.
+known-third-party = [enchant]
+
+# Couples of modules and preferred modules, separated by a comma.
+# preferred-modules =
+
+[tool.pylint.logging]
+# The type of string formatting that logging methods do. `old` means using %
+# formatting, `new` is for `{}` formatting.
+logging-format-style = old
+
+# Logging modules to check that the string format arguments are in logging
+# function parameter format.
+logging-modules = [logging]
+
+[tool.pylint.messages control]
+
+[tool.pylint.method_args]
+
+[tool.pylint.miscellaneous]
+# List of note tags to take in consideration, separated by a comma.
+notes = [FIXME, XXX, TODO]
+
+[tool.pylint.similarities]
+# Comments are removed from the similarity computation
+ignore-comments = true
+
+# Docstrings are removed from the similarity computation
+ignore-docstrings = true
+
+# Imports are removed from the similarity computation
+ignore-imports = true
+
+# Signatures are removed from the similarity computation
+ignore-signatures = true
+
+# Minimum lines number of a similarity.
+min-similarity-lines = 4
+
+[tool.pylint.spelling]
+# Limits count of emitted suggestions for spelling mistakes.
+max-spelling-suggestions = 4
+
+# Spelling dictionary name. Available dictionaries: none. To make it work,
+# install the 'python-enchant' package.
+# spelling-dict =
+
+# List of comma separated words that should be considered directives if they
+# appear at the beginning of a comment and should not be checked.
+spelling-ignore-comment-directives = fmt: on,fmt: off,noqa:,noqa,nosec,isort:skip,mypy:
+
+# List of comma separated words that should not be checked.
+# spelling-ignore-words =
+
+# A path to a file that contains the private dictionary; one word per line.
+# spelling-private-dict-file =
+
+# Tells whether to store unknown words to the private dictionary (see the
+# --spelling-private-dict-file option) instead of raising a message.
+# spelling-store-unknown-words =
+
+[tool.pylint.string]
+# This flag controls whether inconsistent-quotes generates a warning when the
+# character used as a quote delimiter is used inconsistently within a module.
+# check-quote-consistency =
+
+# This flag controls whether the implicit-str-concat should generate a warning on
+# implicit string concatenation in sequences defined over several lines.
+# check-str-concat-over-line-jumps =
+
+[tool.pylint.typecheck]
+
+[tool.pylint.variables]
+# List of additional names supposed to be defined in builtins. Remember that you
+# should avoid defining new builtins when possible.
+# additional-builtins =
+
+# Tells whether unused global variables should be treated as a violation.
+allow-global-unused-variables = true
+
+# List of names allowed to shadow builtins
+# allowed-redefined-builtins =
+
+# List of strings which can identify a callback function by name. A callback name
+# must start or end with one of those strings.
+callbacks = [cb_, _cb]
+
+# A regular expression matching the name of dummy variables (i.e. expected to not
+# be used).
+dummy-variables-rgx = _+$|(_[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_
+
+# Argument names that match this expression will be ignored.
+ignored-argument-names = _.*|^ignored_|^unused_
+
+# Tells whether we should check for unused import in __init__ files.
+# init-import =
+
+# List of qualified module names which can have objects that can redefine
+# builtins.
+redefining-builtins-modules = [six.moves, past.builtins, future.builtins, builtins, io]
+
+

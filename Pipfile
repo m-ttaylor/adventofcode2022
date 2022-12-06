@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-day5 = {editable = true, path = "./day5"}
+black = "*"
 
 [dev-packages]
 pytest = "*"
