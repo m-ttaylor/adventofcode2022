@@ -1,39 +1,37 @@
 from collections import defaultdict
-import math
 
 DEBUG, TEST = False, False
 DAY = "5"
 
 class CrateStack:
-  crates = []
+  crates: list[str] = []
 
-  def __init__(self, data=[]):
-    self.crates = data
+  def __init__(self, data: list[str]=None):
+    if (data): 
+      self.crates = data
+    else:
+      self.crates = []
 
-  def takeCrate(self):
-    # if self.crates != []:
-      return self.crates.pop()
-    # else:
-    #    return None
+  def takeCrate(self) -> str:
+    return self.crates.pop()
+
+  def takeCrates(self, amount: int) -> 'CrateStack':
+    length = len(self.crates)
+    takenCrates = self.crates[length-amount:length]
+    self.crates = self.crates[:length-amount]
+    return CrateStack(takenCrates)
 
   def addCrate(self, crate):
     self.crates.append(crate)
 
-  def addCrateDifferent(self, create):
-    return
+  def addCrates(self, crates: 'CrateStack'):
+    self.crates += crates.crates
 
-  def __repr__(self):
+  def __repr__(self) -> str:
     return f"[{', '.join(self.crates)}]\n"
 
-  def __eq__(self, other):
+  def __eq__(self, other) -> bool:
     return self.crates == other.crates
-
-
-def part1(data):
-  return
-
-def part2(data):
-  return
 
 def readTops(stacks: list[CrateStack]) -> str:
   tops = ''
@@ -43,94 +41,65 @@ def readTops(stacks: list[CrateStack]) -> str:
 
   return tops
 
-def parseCommand(stacks: list[CrateStack], command: str):
+def parseCommand(stacks: list[CrateStack], command: str, version=''):
   words = command.split()
-  print(words)
-  amountOfMoves = int(words[1])
+  moves = int(words[1])
   source = int(words[3])-1
-  destination = int(words[5])-1
+  dest = int(words[5])-1
 
-  # print(f'''interpretting command as making {amountOfMoves} takeCrate() 
-  #   calls on stack index {source} and adding them to stack index {destination}''')
-  # print('state')
-  # print(stacks)
-  for m in range(amountOfMoves):
-    crate = stacks[source].takeCrate()
-    if crate != None:
-      stacks[destination].addCrate(crate)
+  if version == '9001':
+    crates = CrateStack()
+    crates = stacks[source].takeCrates(moves)
+    stacks[dest].addCrates(crates)
 
-def parseStacks(data) -> list[CrateStack]:
+  else:
+    for _ in range(moves):
+      crate = stacks[source].takeCrate()
+      if crate != None:
+        stacks[dest].addCrate(crate)
+
+def parseStacks(data: list[str]) -> list[CrateStack]:
 
   crateStacks = defaultdict(list)
   crateStacksIndexed: list[CrateStack] = []
+
   for line in data:
-    print(line)
-  for line in data:
-    spaceCount = 0
-    index = 0
-
-    # print(line)
-
-    print(line.split(' '))
-
-    # return [CrateStack()]
+    spaceCount, index = 0, 0
+    
     for c in line.split(' '):
       
+      if spaceCount == 4:
+        index += 1
+        spaceCount = 0
+
       if c == '':
         spaceCount += 1
-      # if spaceCount == 3:
-      #   index += 1
-      #   spaceCount = 0
-      if c.startswith('['):
 
-        print(f'adding {c.strip()} to stack {index}')
-        stack = crateStacks[str( index + math.floor( (spaceCount)/3 ) )]
+      elif c.startswith('['):
+        stack = crateStacks[str(index)]
         stack.insert(len(stack), c.strip())
         index += 1
 
-  print(crateStacks['8'])
   for i in range(len(crateStacks)):
       stack = CrateStack(list(reversed(crateStacks[str(i)])))
       crateStacksIndexed.append(stack)
 
-  # print(crateStacks['8'])
   return crateStacksIndexed
 
-def solve(data: list) -> int:
-  # return True
+def splitData(data: list[str]):
+
   splitIndex = data.index('\n')
   stacks, commands = data[:splitIndex-1], data[splitIndex+1:]
 
-  # print(stacks)
-  # print(commands)
+  return (stacks, commands)
 
+def solve(data: list[str], version='') -> int:
+  stacks, commands = splitData(data)
   crateStacksIndexed = parseStacks(stacks)
-  # return ''
 
-  for stack in crateStacksIndexed:
-    print(stack)
-
-  print(crateStacksIndexed[8])
-  # print('state before making moves:', crateStacksIndexed)
-
-  return ''
   for command in commands:
+    parseCommand(crateStacksIndexed, command, version)
 
-    # print('the whole line', command)
-
-    if command.startswith('move'):
-      parseCommand(crateStacksIndexed, command)
-
-  # print(crateStacks)
-  # print('-'*20)
-  print(crateStacksIndexed)
-
-  # answer = ''
-  # for stack in crateStacksIndexed:
-  #   if stack.crates != []:
-  #     answer += stack.takeCrate().strip('[').strip(']')
-
-  # print('final answer', answer)
   return readTops(crateStacksIndexed)
   
 if __name__ == "__main__":
@@ -140,9 +109,7 @@ if __name__ == "__main__":
               f'./day{DAY}/testday{DAY}input2.txt']
 
   filename = datasets[1] if TEST else datasets[0]
+
   with open(filename, 'r') as file:
     lines = file.readlines()
-    print(solve(lines))
-
-    # LRSTJLNPG is wrong
-
+    print(solve(lines, '9001'))
