@@ -4,17 +4,16 @@ DAY = "6"
 def solve(lines: list[str]):
   return findMarker(lines[0], 14)
 
-def findMarker(line: str, markerSize: int):
+def findMarker(line: str, markerSize: int) -> int:
   lastFour = []
   for i, c in enumerate(line):
     lastFour.append(c)
-    print(lastFour)
     if len(lastFour) > markerSize:
       lastFour.pop(0)
 
     if len(lastFour) == markerSize and len(lastFour) == len(set(lastFour)):
-      return str(i+1)
-  return 'a'
+      return i+1
+  return -1
   
 if __name__ == "__main__":
   # TEST = True
