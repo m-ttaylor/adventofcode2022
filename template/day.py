@@ -1,25 +1,19 @@
-"""File directory exploration"""
+"""foo"""
+
 DEBUG, TEST = False, False
-DAY = "7"
+DAY = "x"
 
 
-def part1(data):
+def solve(data: list):
     """foo"""
-    return
-
-
-def part2(data):
-    return
-
-
-def solve(data: list) -> int:
-    return True
+    return "foo"
 
 
 if __name__ == "__main__":
     # TEST = True
+    # DEBUG = True
     datasets = [f"./day{DAY}/day{DAY}input.txt", f"./day{DAY}/testday{DAY}input.txt"]
     filename = datasets[1] if TEST else datasets[0]
-    with open(filename, "r") as file:
+    with open(file=filename, mode="r", encoding="utf8") as file:
         lines = file.readlines()
         print(solve(lines))

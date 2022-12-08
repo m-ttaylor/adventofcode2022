@@ -1,4 +1,5 @@
 [tool.pylint.main]
+ignore-patterns=(.)*_test\.py,test_(.)*\.py
 
 [tool.pylint.basic]
 # Naming style matching correct argument names.

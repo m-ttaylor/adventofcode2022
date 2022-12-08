@@ -1,4 +1,4 @@
-import day8
+from day8 import day8
 
 DAY = "8"
 
