@@ -38,7 +38,7 @@ class-naming-style = PascalCase
 function-naming-style = camelCase
 
 # Good variable names which should always be accepted, separated by a comma.
-good-names = i, j, k, a, b, c, ex, Run, _
+good-names = i, j, k, a, b, c, r, ex, Run, _
 
 # Include a hint for the correct naming format with invalid-name.
 # include-naming-hint = true

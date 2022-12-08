@@ -1,6 +1,7 @@
-DAY = "5"
 from day5.day5 import CrateStack
 from day5 import day5
+
+DAY = "5"
 
 data = []
 with open(f"./day{DAY}/day{DAY}input.txt") as f:
