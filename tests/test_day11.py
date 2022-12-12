@@ -23,3 +23,17 @@ def test_partOneRealData():
 
     actual = day11.solve(data, 1, 20)
     assert expected == actual
+
+
+def test_partTwoTestData():
+    expected = 2713310158
+
+    actual = day11.solve(testData, 2, 10000)
+    assert expected == actual
+
+
+def test_partTwoRealData():
+    expected = 14081365540
+
+    actual = day11.solve(data, 2, 10000)
+    assert expected == actual

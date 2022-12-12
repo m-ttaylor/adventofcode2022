@@ -1,4 +1,6 @@
-"""foo"""
+"""day11"""
+
+import math
 
 DEBUG, TEST = False, False
 DAY = "11"
@@ -103,11 +105,12 @@ class Monkey:
 
         return item
 
-    def calmDown(self, item, method):
+    def calmDown(self, item, method, lcm):
         """reduce worry level of item"""
         if method == 1:
             item = item // 3
-            # item = item % 96577
+        elif method == 2:
+            item = item % lcm  # 96577
 
         if DEBUG:
             print(
@@ -169,6 +172,7 @@ def readInMonkeys(data: list):
     monkeyA: str
     monkeyB: str
     condition: int
+    conditions = []
     # just get the monkeys
     for line in data:
         if line.startswith("Monkey"):
@@ -194,6 +198,7 @@ def readInMonkeys(data: list):
 
         elif line.strip().startswith("Test:"):
             condition = int(splitLine(line).split(" ")[2])
+            conditions.append(condition)
 
         elif line.strip().startswith("If true:"):
             monkeyA = int(splitLine(line).split(" ")[3])
@@ -204,13 +209,13 @@ def readInMonkeys(data: list):
                 Test(condition, monkeys[monkeyA], monkeys[monkeyB])
             )
 
-    return monkeys
+    return (monkeys, math.lcm(*conditions))
 
 
 def solve(data: list, method=1, rounds=20):
     """foo"""
 
-    monkeys = readInMonkeys(data)
+    monkeys, lcm = readInMonkeys(data)
 
     for mbizround in range(rounds):
         for monkey in monkeys:
@@ -219,7 +224,7 @@ def solve(data: list, method=1, rounds=20):
             while len(monkey.items) > 0:
                 item = monkey.popItem()
                 item = monkey.inspect(item)
-                item = monkey.calmDown(item, method)
+                item = monkey.calmDown(item, method, lcm)
                 monkey.testAndThrow(item)
 
         if DEBUG:
@@ -242,11 +247,11 @@ def solve(data: list, method=1, rounds=20):
 
 
 if __name__ == "__main__":
-    TEST = True
+    # TEST = True
     # DEBUG = True
     datasets = [f"./day{DAY}/day{DAY}input.txt", f"./day{DAY}/testday{DAY}input.txt"]
     filename = datasets[1] if TEST else datasets[0]
     with open(file=filename, mode="r", encoding="utf8") as file:
         lines = file.readlines()
         print(solve(lines, 1, 20))
-        # print(solve(lines, 2, 10000))
+        print(solve(lines, 2, 10000))
