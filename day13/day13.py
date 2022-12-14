@@ -1,7 +1,9 @@
 from ast import literal_eval
+from functools import cmp_to_key
+from math import prod
 
-TEST = True
-# TEST = False
+DEBUG = False
+TEST = False
 
 
 def ints(line: str) -> list[int]:
@@ -26,105 +28,70 @@ if TEST:
 else:
     with open(file="day13/13input.txt", mode="r", encoding="utf8") as f:
         lines = [line.strip() for line in f.readlines()]
-    # print(lines)
+
+packets = [
+    [literal_eval(lines[i - 1]), literal_eval(lines[i])]
+    for i in range(1, len(lines), 3)
+    if lines[i - 1] != "" and lines[i] != ""
+]
+
+part2packets = [literal_eval(line) for line in lines if line != ""]
+part2packets.append([[2]])
+part2packets.append([[6]])
 
 
-def parse(s):
-    if s == "":
-        return
-
-    def rParse(s):
-        output = []
-        i = 0
-        num = ""
-        while i < len(s):
-            c = s[i]
-            i += 1
-            if c.isdigit():
-                num += c
-            if c in ",]" and num:
-                output.append(int(num))
-                num = ""
-            if c == "[":
-                substring, offset = rParse(s[i:])
-                output.append(substring)
-                i += offset
-            elif c == "]":
-                break
-        return output, i
-
-    return rParse(s)[0][0]
+def compare(l, r):
+    match l, r:
+        case int(), int():
+            return (l > r) - (l < r)
+        case int(), list():
+            return compare([l], r)
+        case list(), int():
+            return compare(l, [r])
+        case list(), list():
+            for z in map(compare, l, r):
+                if z:
+                    return z
+            return compare(len(l), len(r))
 
 
-# print(lines[5] == "")
-# print(parse(lines[3]))
-
-pairs = [[]]
-index = 0
-for line in lines:
-    if line == "":
-        index += 1
-        pairs.append([])
-    elif line != "":
-        pairs[index].append(literal_eval(line))
-
-for i, p in enumerate(pairs):
-    print(f"pair {i+1}:", p)
-
-
-def compareAandB(a, b, i):
-    bad = False
-    for j in range(max(len(a), len(b))):
-        left = a[j] if j < len(a) else None
-        right = b[j] if j < len(b) else None
-        if isinstance(left, int) and isinstance(right, list):
-            left = [left]
-        if isinstance(right, int) and isinstance(left, list):
-            right = [right]
-        if isinstance(left, list) and isinstance(right, list):
-            return compareAandB(left, right, i)
-
-        print(f"left: {left}")
-        print(f"right: {right}")
-        if left is None:
-            print("left side ran out of items so input are in right order")
-            continue
-        if right is None:
-            print("right side ran out of items, so inputs are not in right order")
-            bad = True
-            break
-        if left > right:
-            print("right side is smaller, so inputs are not in right order")
-            bad = True
-            break
-        if left == right or left < right:
-            continue
-    return not bad
+def compareAtoB(left, right):
+    match (left, right):
+        case None, _:
+            return -1
+        case _, None:
+            return 1
+        case int(), list():
+            return compareAtoB([left], right)
+        case list(), int():
+            return compareAtoB(left, [right])
+        case list(), list():
+            for result in map(compareAtoB, left, right):
+                if result:
+                    return result
+            return compareAtoB(len(left), len(right))
+        case int(), int():
+            if left == right:
+                return 0
+            if left > right:
+                return 1
+            if left < right:
+                return -1
 
 
-def checkOrder(pairs):
-    goodCount = 0
-    for i, (a, b) in enumerate(pairs):
-        # print(f"a: {a}")
-        # print(f"b: {b}")
-        print(f"pair {i + 1}:")
-        good = compareAandB(a, b, i)
-
-        if good:
-            print(f"things were fine at pair {i+1}")
-            goodCount += i + 1
-    # bad += i + 1
-
-    return goodCount
+def checkOrder(packets):
+    return sum(i + 1 for i, p in enumerate(packets) if compareAtoB(*p) == -1)
 
 
-print(checkOrder(pairs))
+def order(packets):
+    indices = []
+    for i, p in enumerate(sorted(packets, key=cmp_to_key(compareAtoB)), 1):
+        if p in [[[2]], [[6]]]:
+            print(i)
+            indices.append(i)
+
+    return prod(indices)
 
 
-# print(parseInts(lines[0]))
-# for line in lines:
-#     rtn.append(parseInts(line))
-
-# print(rtn)
-
-# print(ints("1 1 3 1 1"))
+print("part1:", checkOrder(packets))
+print("part2:", order(part2packets))
